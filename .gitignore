@@ -42,3 +42,5 @@ target
 .flattened-pom.xml
 /.vscode/
 /.vscode/*
+
+/frontend/node_modules/*
