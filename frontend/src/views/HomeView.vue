@@ -20,16 +20,22 @@
         </div>
         
         <div class="feature-card">
-          <el-icon class="feature-icon"><User /></el-icon>
-          <h3>个性化体验</h3>
-          <p>自由选择想要对话的AI助手</p>
+          <el-icon class="feature-icon"><Connection /></el-icon>
+          <h3>成语接龙</h3>
+          <p>与多个AI进行趣味成语接龙游戏</p>
         </div>
       </div>
       
       <div class="action-container">
-        <router-link to="/chat">
+        <router-link to="/chat" class="action-button">
           <el-button type="primary" size="large" class="enter-button">
             进入聊天
+            <el-icon class="el-icon--right"><ArrowRight /></el-icon>
+          </el-button>
+        </router-link>
+        <router-link to="/idiom" class="action-button">
+          <el-button type="success" size="large" class="enter-button">
+            成语接龙
             <el-icon class="el-icon--right"><ArrowRight /></el-icon>
           </el-button>
         </router-link>
@@ -39,7 +45,7 @@
 </template>
 
 <script setup>
-import { ChatDotRound, Opportunity, User, ArrowRight } from '@element-plus/icons-vue'
+import { ChatDotRound, Opportunity, ArrowRight, Connection } from '@element-plus/icons-vue'
 </script>
 
 <style scoped>
@@ -118,6 +124,13 @@ import { ChatDotRound, Opportunity, User, ArrowRight } from '@element-plus/icons
 
 .action-container {
   margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.action-button {
+  text-decoration: none;
 }
 
 .enter-button {

@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @Service
 @RequiredArgsConstructor
@@ -61,5 +64,36 @@ public class ChatService {
                 .thenApply(v -> futures.stream()
                         .map(CompletableFuture::join)
                         .collect(Collectors.toList()));
+    }
+
+    /**
+     * 处理成语接龙请求
+     * @param message 提示信息
+     * @param targetAi AI模型名称
+     * @return AI返回的成语
+     * @throws RuntimeException 如果AI调用失败
+     */
+    public String chat(String targetAi, String message) {
+        try {
+            CompletableFuture<List<AIResponse>> future = processMessage(message, targetAi);
+            List<AIResponse> responses = future.get(5, TimeUnit.MINUTES); // 设置30秒超时
+
+            if (responses == null || responses.isEmpty()) {
+                throw new RuntimeException("No response from AI");
+            }
+
+            AIResponse response = responses.get(0);
+            if (response == null || response.getContent() == null) {
+                throw new RuntimeException("Invalid response from AI");
+            }
+
+            return response.getContent();
+        } catch (InterruptedException | ExecutionException e) {
+            log.error("Error while getting AI response", e);
+            throw new RuntimeException("AI service error: " + e.getMessage());
+        } catch (TimeoutException e) {
+            log.error("AI response timeout", e);
+            throw new RuntimeException("AI response timeout");
+        }
     }
 } 
